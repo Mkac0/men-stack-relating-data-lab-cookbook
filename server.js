@@ -7,7 +7,11 @@ const methodOverride = require('method-override');
 const morgan = require('morgan');
 const session = require('express-session');
 
+// ------     Middleware      -------
 const authController = require('./controllers/auth.js');
+const foodsController = require('./controllers/foods.js');
+app.use('/users/:userId/foods', foodsController);
+app.use('/auth', authController);
 
 const port = process.env.PORT ? process.env.PORT : '3000';
 
@@ -28,6 +32,7 @@ app.use(
   })
 );
 
+// ------     Routes     ------
 app.get('/', (req, res) => {
   res.render('index.ejs', {
     user: req.session.user,
@@ -42,8 +47,8 @@ app.get('/vip-lounge', (req, res) => {
   }
 });
 
-app.use('/auth', authController);
 
+// ------     Listener      ------
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
