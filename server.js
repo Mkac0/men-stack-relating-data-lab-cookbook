@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -13,10 +14,7 @@ const foodsController = require('./controllers/foods.js');
 const isSignedIn = require('./middleware/is-signed-in.js');
 const passUserToView = require('./middleware/pass-user-to-view.js');
 
-app.use(passUserToView);
-app.use('/auth', authController);
-app.use(isSignedIn);
-app.use('/users/:userId/foods', foodsController);
+const path = require('path');
 
 const port = process.env.PORT ? process.env.PORT : '3000';
 
@@ -24,6 +22,8 @@ mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
   console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
@@ -36,21 +36,20 @@ app.use(
   })
 );
 
+app.use(passUserToView);
+
+app.use('/auth', authController);
+app.use(isSignedIn);
+app.use('/users/:userId/foods', foodsController);
+
 // ------     Routes     ------
 app.get('/', (req, res) => {
-  res.render('index.ejs', {
-    user: req.session.user,
-  });
-});
-
-app.get('/vip-lounge', (req, res) => {
   if (req.session.user) {
-    res.send(`Welcome to the party ${req.session.user.username}.`);
+    res.redirect(`/users/${req.session.user._id}/foods`);
   } else {
-    res.send('Sorry, no guests allowed.');
+    res.render('index.ejs');
   }
 });
-
 
 // ------     Listener      ------
 app.listen(port, () => {
