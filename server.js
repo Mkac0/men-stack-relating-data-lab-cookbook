@@ -38,10 +38,6 @@ app.use(
 
 app.use(passUserToView);
 
-app.use('/auth', authController);
-app.use(isSignedIn);
-app.use('/users/:userId/foods', foodsController);
-
 // ------     Routes     ------
 app.get('/', (req, res) => {
   if (req.session.user) {
@@ -50,6 +46,10 @@ app.get('/', (req, res) => {
     res.render('index.ejs');
   }
 });
+
+app.use('/auth', authController);
+app.use(isSignedIn);
+app.use('/users/:userId/foods', foodsController);
 
 // ------     Listener      ------
 app.listen(port, () => {
