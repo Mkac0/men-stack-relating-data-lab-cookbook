@@ -19,6 +19,8 @@ const usersController = require('./controllers/users');
 const port = process.env.PORT ? process.env.PORT : '3000';
 
 const path = require('path');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
@@ -41,6 +43,8 @@ app.use(
 app.use(passUserToView);
 
 // ------     Routes     ------
+app.get('/users', usersController.index);
+
 app.get('/', (req, res) => {
   if (req.session.user) {
     res.redirect(`/users/${req.session.user._id}/foods`);
