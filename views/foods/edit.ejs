@@ -10,7 +10,7 @@
     <div class="edit-body">
         <h1>Edit <%= food.name %> at <%= food.recipe %></h1>
         <form
-            action="/users/<%= user._id %>/pantry/<%= food._id %>?_method=PUT"
+            action="/users/<%= user._id %>/foods/<%= food._id %>?_method=PUT"
             method="POST"
         >
             <label for="name">Name</label>
