@@ -7,6 +7,13 @@
 </head>
 <body>
     <%- include('../partials/_navbar.ejs') %>
-    <h1><%= food.title %> of <%= food.pantry %></h1>
+    <h1><%= food.name %> of <%= food.pantry %></h1>
+    <a href="/users/<%= user._id %>/pantry/<%= food._id %>/edit">Edit Post</a>
+    <form
+        action="/users/<%= user._id %>/pantry/<%= food._id %>?_method=DELETE"
+        method="POST"
+        >
+        <button type="submit">Delete Post</button>
+    </form>
 </body>
 </html>

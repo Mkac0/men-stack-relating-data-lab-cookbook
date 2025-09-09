@@ -1,28 +1,28 @@
 const mongoose = require('mongoose');
 
-const foodSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const foodSchema = new mongoose.Schema({ 
+  name: { 
+    type: String, 
+    required: true 
   },
+  recipe: {
+    type: String,
+    required: true
+  }
 });
-
-const userSchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new mongoose.Schema({
+  username: { 
+    type: String, 
+    required: true, 
+    unique: true 
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  pantry: {
-  type: [foodSchema],
+  password: { 
+    type: String, 
+    required: true },
+  pantry: { type: [foodSchema]
   },
 });
 
 const User = mongoose.model('User', userSchema);
-const Food = mongoose.model('Food', foodSchema);
 
-module.exports = { User, Food }
+module.exports = User;
