@@ -3,6 +3,7 @@ const router = express.Router({ mergeParams: true });
 
 const User = require('../models/user.js');
 
+// index
 router.get('/', async (req, res) => {
     try {
         const currentUser = await User.findById(req.session.user._id);
@@ -16,6 +17,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// new
 router.get('/new', async (req, res) => {
     const currentUser = await User.findById(req.session.user._id);
     res.render('foods/new.ejs', {
@@ -24,11 +26,12 @@ router.get('/new', async (req, res) => {
     });
 });
 
-router.get('/:foodId', async (req, res) => {
+// edit
+router.get('/:foodId/edit', async (req, res) => {
     try {
         const currentUser = await User.findById(req.session.user._id);
         const food = currentUser.pantry.id(req.params.foodId);
-        res.render('foods/show.ejs', {
+        res.render('foods/edit.ejs', {
             user: currentUser, food
         });
     } catch (error) {
@@ -37,11 +40,12 @@ router.get('/:foodId', async (req, res) => {
     }
 });
 
-router.get('/users/:userId/foods/:foodId/edit', async (req, res) => {
+// show
+router.get('/:foodId', async (req, res) => {
     try {
         const currentUser = await User.findById(req.session.user._id);
         const food = currentUser.pantry.id(req.params.foodId);
-        res.render('foods/edit.ejs', {
+        res.render('foods/show.ejs', {
             user: currentUser, food
         });
     } catch (error) {
@@ -62,6 +66,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// update
 router.put('/:foodId', async (req, res) => {
     try {
         const currentUser = await User.findById(req.session.user._id);
@@ -75,10 +80,11 @@ router.put('/:foodId', async (req, res) => {
     }
 });
 
+// delete
 router.delete('/:foodId', async (req, res) => {
     try {
         const currentUser = await User.findById(req.session.user._id);
-        currentUser.pantry.id(req.params.foodId).deleteOne();
+        currentUser.pantry.id(req.params.foodId)?.deleteOne();
         await currentUser.save();
         res.redirect(`/users/${req.params.userId}/foods`);
     } catch (error) {
